@@ -119,7 +119,7 @@ class KNN:
             prediction = 0
             for j in range(self.k):
                 sortedlist = np.sort(dists[i])
-                prediction = prediction + 1 if self.train_y[np.where(dists[i] == sortedlist[j])] == 1 else prediction
+                prediction = prediction + 1 if self.train_y[np.where(dists[i] == sortedlist[j])][0] == 1 else prediction
             pred[i] = 1 if prediction/self.k >= 0.5 else 0
         return pred
 
@@ -141,5 +141,9 @@ class KNN:
         for i in range(num_test):
             # TODO: Implement choosing best class based on k
             # nearest training samples
-            pass
+            likely_vector = [0] * 10
+            for j in range(self.k):
+                sorted_list = np.sort(dists[i])
+                likely_vector[self.train_y[np.where(dists[i] == sorted_list[j])][0]] += 1
+            pred[i] = likely_vector.index(max(likely_vector))
         return pred
